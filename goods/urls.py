@@ -1,6 +1,5 @@
 from django.urls import path, re_path
-# from . import views
-from goods.twviews import GoodListView, GoodDetailView
+from goods.views import GoodListView, GoodDetailView
 
 urlpatterns = [
     re_path(r'^(?:(?P<cat_id>\d+)/)?$', GoodListView.as_view(), name = 'index'),

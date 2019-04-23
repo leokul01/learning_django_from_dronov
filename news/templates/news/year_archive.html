@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Новости за {{ year|date:'Y' }} год{% endblock %}
+
+{% block main %}
+    <h2>Архив новостей за {{ year|date:'Y' }} год</h2>
+    {% for new in object_list %}
+        <h3>{{ new.title }}</h3>
+        <p>{{ new.pub_date }}</p>
+        <p>{{ new.description }}</p>
+    {% endfor %}
+
+    <!-- Список месяцев -->
+    <ul>
+        {% for date in date_list %}
+            <li>{{ date|date:'E' }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

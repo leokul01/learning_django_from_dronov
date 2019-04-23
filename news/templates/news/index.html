@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}News{% endblock %}
+
+{% block main %}
+    {% for new in latest %}
+        <h3>{{ new.title }}</h3>
+        <p>{{ new.pub_date }}</p>
+        <p>{{ new.description }}</p>
+    {% endfor %}
+    <ul>
+        {% for date in date_list %}
+        <li>{{ date|date:'Y' }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
