@@ -1,10 +1,16 @@
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, ContextMixin
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.core.paginator import Paginator, InvalidPage
 from goods.models import Category, Good
 
-class GoodListView(ListView):
+class CategoryListMixin(ContextMixin):
+    def get_context_data(self, **kwargs):
+        context = super(CategoryListMixin, self).get_context_data(**kwargs)
+        context['cats'] = Category.objects.order_by('name')
+        return context
+
+class GoodListView(ListView, CategoryListMixin):
     template_name = 'goods/index.html'
     paginate_by = 1
     context_object_name = 'goods'
@@ -19,14 +25,13 @@ class GoodListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(GoodListView, self).get_context_data(**kwargs)
-        context['cats'] = Category.objects.order_by('name')
         context['category'] = self.cat
         return context
 
     def get_queryset(self):
         return Good.objects.filter(category = self.cat).order_by('name')
 
-class GoodDetailView(DetailView):
+class GoodDetailView(DetailView, CategoryListMixin):
     template_name = 'goods/good.html'
     model = Good
     pk_url_kwarg = 'good_id'
@@ -38,5 +43,4 @@ class GoodDetailView(DetailView):
             context['pn'] = self.request.GET['page']
         except KeyError:
             context['pn'] = 1
-        context['cats'] = Category.objects.order_by('name')
         return context
